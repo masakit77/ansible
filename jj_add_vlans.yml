@@ -1,0 +1,51 @@
+---
+- name: Create a New Vlan
+  hosts:
+    - spine
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+#  vars:
+#    curr_date: "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+  vars_files:
+    - vlan.yml
+  vars_prompt:
+    - name: "username"
+      prompt: "Username"
+      private: no
+    - name: "password"
+      prompt: "Password"
+      private: yes
+
+  tasks:
+    - name: Setting Configurations
+      juniper_junos_config:
+        host: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+#        port: "{{ port }}"
+        timeout: 300
+        lines:
+          - set vlans "{{ vlanname }}" vlan-id "{{ vlanid }}"
+          - set vlans "{{ vlanname }}" description "{{ customer }}"
+          - set vlans "{{ vlanname }}" vxlan vni "{{ vnid }}"
+          - set vlans "{{ vlanname }}" vxlan ingress-node-replication
+          - set vlans vlan999 vlan-id 999
+#      register: response
+#    - name: Result
+#      debug:
+#        var: response
+
+#    - name: Retrieve Configuration and Save to File
+#      juniper_junos_config:
+#        host: "{{ inventory_hostname }}"
+#        username: "{{ username }}"
+#        password: "{{ password }}"
+#        retrieve: 'committed'
+#        dest: "{{ inventory_hostname }}_{{ curr_date }}.conf"
+#      register: response
+#    - name: Result the config changes
+#      debug:
+#        var: response
+...

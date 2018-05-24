@@ -1,0 +1,4 @@
+vlanname: vlan3000
+customer: "Configured by Ansible"
+vlanid: 3000
+vnid: 30000
